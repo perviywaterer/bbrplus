@@ -2,9 +2,9 @@ name: Makefile CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "gcc" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "gcc" ]
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     - run: sudo apt update -y
     - run: sudo apt-get install git fakeroot bc kmod cpio build-essential libarchive-dev  libarchive-tools libncurses5-dev ncurses-dev xz-utils dwarves   libssl-dev bc flex libelf-dev bison llvm libncurses-dev gawk flex bison openssl dkms libelf-dev libudev-dev libpci-dev clang lld libiberty-dev autoconf -y
     - run: git submodule update --init --recursive
-    - run: make -j $(nproc) bindeb-pkg CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+    - run: make -j $(nproc) bindeb-pkg
     - run: mkdir tar.dir
     - run: mv *.deb tar.dir/
     - name: Upload Artifacts
