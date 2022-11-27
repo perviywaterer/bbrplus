@@ -35,8 +35,13 @@
  *
  * (default: 6ms * (1 + ilog(ncpus)), units: nanoseconds)
  */
+#ifdef CONFIG_ZENIFY
+unsigned int sysctl_sched_latency			= 3000000ULL;
+static unsigned int normalized_sysctl_sched_latency	= 3000000ULL;
+#else
 unsigned int sysctl_sched_latency			= 6000000ULL;
 static unsigned int normalized_sysctl_sched_latency	= 6000000ULL;
+#endif
 
 /*
  * The initial- and re-scaling of tunables is configurable
@@ -56,13 +61,22 @@ unsigned int sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_LOG;
  *
  * (default: 0.75 msec * (1 + ilog(ncpus)), units: nanoseconds)
  */
+#ifdef CONFIG_ZENIFY
+unsigned int sysctl_sched_min_granularity			= 300000ULL;
+static unsigned int normalized_sysctl_sched_min_granularity	= 300000ULL;
+#else
 unsigned int sysctl_sched_min_granularity			= 750000ULL;
 static unsigned int normalized_sysctl_sched_min_granularity	= 750000ULL;
+#endif
 
 /*
  * This value is kept at sysctl_sched_latency/sysctl_sched_min_granularity
  */
+#ifdef CONFIG_ZENIFY
+static unsigned int sched_nr_latency = 10;
+#else
 static unsigned int sched_nr_latency = 8;
+#endif
 
 /*
  * After fork, child runs first. If set to 0 (default) then
@@ -133,7 +147,11 @@ int __weak arch_asym_cpu_priority(int cpu)
  *
  * (default: 5 msec, units: microseconds)
  */
+#ifdef CONFIG_ZENIFY
+unsigned int sysctl_sched_cfs_bandwidth_slice		= 3000UL;
+#else
 unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
+#endif
 #endif
 
 static inline void update_load_add(struct load_weight *lw, unsigned long inc)
