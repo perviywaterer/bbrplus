@@ -17,7 +17,7 @@ jobs:
     - run: sudo apt update -y
     - run: sudo apt-get install git fakeroot build-essential libarchive-dev  libarchive-tools ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison llvm libncurses-dev gawk flex bison openssl dkms libelf-dev libudev-dev libpci-dev clang lld libiberty-dev autoconf -y
     - run: git submodule update --init --recursive
-    - run: fakeroot make-kpkg --initrd - -append-to-version=-fw-clang-bbrplus kernel_image kernel_headers -j $(nproc) CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+    - run: nice make -j $(nproc) bindeb-pkg CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
     - run: mkdir tar.dir
     - run: mv *.deb tar.dir/
     - name: Upload Artifacts
