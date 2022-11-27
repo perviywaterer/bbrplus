@@ -1,0 +1,27 @@
+nname: Build bbr
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - run: sudo apt update -y
+    - run: sudo apt-get install git fakeroot build-essential libarchive-dev  libarchive-tools ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison llvm libncurses-dev gawk flex bison openssl dkms libelf-dev libudev-dev libpci-dev clang lld libiberty-dev autoconf -y
+    - run: git submodule update --init --recursive
+    - run: make-kpkg clean
+    - run: fakeroot make-kpkg --initrd --revision=bbrplus-515-fw kernel_image kernel_headers -j $(nproc) CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip   OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf   HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
+    - run: mkdir tar.dir
+    - run: mv *.deb tar.dir/
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: workflow.tar.xz
+        path: ./tar.dir/
